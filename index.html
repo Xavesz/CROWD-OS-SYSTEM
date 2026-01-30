@@ -1,1 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureEvent | Crowd Physics Estimator</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Dynamic Thermal Background -->
+    <div class="thermal-bg"></div>
+
+    <div class="container">
+        <header>
+            <h1><i class="fa-solid fa-shield-halved"></i> SecureEvent</h1>
+            <p>Predictive Crowd Safety Infrastructure Planner</p>
+        </header>
+
+        <main>
+            <!-- INPUT SECTION -->
+            <section class="card input-card">
+                <h2><i class="fa-solid fa-sliders"></i> Event Metrics</h2>
+                <form id="calculator-form">
+                    <div class="input-group">
+                        <label>Expected Attendees</label>
+                        <input type="number" id="attendees" value="5000" min="0">
+                        <small>Total ticket sales projected</small>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Venue Size (sq. meters)</label>
+                        <input type="number" id="venue-size" value="2500" min="0">
+                        <small>Open standing area only</small>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Entry/Exit Gates</label>
+                        <input type="number" id="gates" value="4" min="1">
+                        <small>Choke points requiring velocity tracking</small>
+                    </div>
+                </form>
+            </section>
+
+            <!-- OUTPUT SECTION -->
+            <section class="card output-card">
+                <h2><i class="fa-solid fa-calculator"></i> Deployment Plan</h2>
+                
+                <div class="results-grid">
+                    <div class="result-item">
+                        <h3>Guardian Bands</h3>
+                        <p id="res-bands" class="big-number">0</p>
+                        <span class="badge">Includes 5% Buffer</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <h3>Thermal Omni-Nodes</h3>
+                        <p id="res-nodes" class="big-number">0</p>
+                        <span class="badge">Gates + Open Zones</span>
+                    </div>
+
+                    <div class="result-item cost-item">
+                        <h3>Est. Rental Budget</h3>
+                        <p id="res-cost" class="big-number">₹ 0</p>
+                        <span class="badge">Total OPEX</span>
+                    </div>
+                </div>
+
+                <div class="technical-summary">
+                    <h4><i class="fa-solid fa-microchip"></i> System Logic</h4>
+                    <ul id="logic-list">
+                        <li>Loading AI Logic...</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- VISUALIZATION SECTION -->
+            <section class="card visual-card">
+                <h2><i class="fa-solid fa-eye"></i> Hardware Preview</h2>
+                <div class="device-showcase">
+                    <!-- CSS Drawn Watch -->
+                    <div class="watch-container">
+                        <div class="watch-strap"></div>
+                        <div class="watch-body">
+                            <div class="screen" id="watch-screen">
+                                <i class="fa-solid fa-arrow-right blink"></i>
+                                <span class="zone-text">SAFE ZONE</span>
+                            </div>
+                        </div>
+                        <div class="watch-strap bottom"></div>
+                        <div class="sensor-glow"></div>
+                    </div>
+                    <p class="caption">Guardian Band (Active Mode)</p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>SecureEvent Proprietary Algorithm. Deployment uses AMG8833 Thermal Sensors & PhysioKit Architecture.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
 
