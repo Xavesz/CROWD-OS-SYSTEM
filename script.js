@@ -1,105 +1,72 @@
-/* SECURE EVENT - Pricing & Infrastructure Logic
-    Optimized for Speed & Crash-Proofing
+/* SECURE EVENT - Pricing Logic
+   Separated for Cleanliness and Performance
 */
 
-// --- CONFIGURATION (Prices in INR) ---
+// --- CONFIGURATION ---
 const CONFIG = {
-    NODE_RENTAL_COST: 5000, // Per Omni-Node
-    BAND_RENTAL_COST: 100,  // Per Wristband
-    NODE_COVERAGE: 150,     // 1 Node covers 150sqm (7m radius)
-    BAND_BUFFER: 1.05       // 5% extra stock for replacement
+    NODE_RENTAL_COST: 12000, // INR per unit
+    BAND_RENTAL_COST: 1250,  // INR per unit
+    NODE_COVERAGE: 150,      // 1 Node covers 150sqm
+    BAND_BUFFER: 1.05        // 5% Extra stock
 };
 
-// Global object to store active animation frames (prevents lagging)
-let activeAnimations = {};
-
-// --- MAIN CALCULATE FUNCTION ---
-function calculate() {
-    // 1. Get Inputs safely (Converts text/empty to 0 instantly)
-    // We use Number() instead of parseInt to safely handle empty strings
+// --- MAIN FUNCTION ---
+function calculatePlan() {
+    // 1. Get Inputs safely (Convert empty inputs to 0)
     let attendees = Number(document.getElementById('attendees').value) || 0;
     let area = Number(document.getElementById('area').value) || 0;
     let gates = Number(document.getElementById('gates').value) || 0;
 
-    // Prevent negative numbers
-    attendees = Math.max(0, attendees);
-    area = Math.max(0, area);
-    gates = Math.max(0, gates);
+    // Prevent negative numbers (just in case)
+    if (attendees < 0) attendees = 0;
+    if (area < 0) area = 0;
+    if (gates < 0) gates = 0;
 
-    // 2. LOGIC: Guardian Bands
-    // Formula: Attendees + 5% buffer (always round up)
+    // 2. Logic: Bands
     let totalBands = Math.ceil(attendees * CONFIG.BAND_BUFFER);
 
-    // 3. LOGIC: Thermal Omni-Nodes
-    // Part A: Gate Nodes (2 per gate for Velocity Tracking In/Out)
+    // 3. Logic: Nodes (Gates + Zones)
     let gateNodes = gates * 2;
-    
-    // Part B: Zone Nodes (1 per 150sqm for Density Counting)
-    // If area is 0, we need 0 zone nodes (Math.ceil of 0 is 0)
     let zoneNodes = Math.ceil(area / CONFIG.NODE_COVERAGE);
-    
     let totalNodes = gateNodes + zoneNodes;
 
-    // 4. LOGIC: Financials
-    let costBands = totalBands * CONFIG.BAND_RENTAL_COST;
-    let costNodes = totalNodes * CONFIG.NODE_RENTAL_COST;
-    let totalBudget = costBands + costNodes;
+    // 4. Logic: Cost
+    let totalCost = (totalBands * CONFIG.BAND_RENTAL_COST) + (totalNodes * CONFIG.NODE_RENTAL_COST);
 
-    // 5. UPDATE UI
-    // Run smooth animations for the counters
+    // 5. Trigger Animations
     animateValue("band-count", totalBands);
     animateValue("node-count", totalNodes);
     
-    // Direct update for cost (Strings are harder to animate smoothly with symbols)
-    const budgetElement = document.getElementById("total-cost");
-    budgetElement.innerHTML = "₹ " + totalBudget.toLocaleString('en-IN');
+    // Update Cost (Direct Text update to handle Symbol easily)
+    document.getElementById("total-cost").innerHTML = "₹ " + totalCost.toLocaleString('en-IN');
 }
 
-// --- SMOOTH ANIMATION ENGINE ---
+// --- ANIMATION UTILITY ---
 function animateValue(id, endValue) {
     const obj = document.getElementById(id);
-    if (!obj) return;
-
-    // STOP previous animation if user is typing fast (Fixes the "Jitter/Lag")
-    if (activeAnimations[id]) {
-        cancelAnimationFrame(activeAnimations[id]);
-    }
-
-    // Get current number (Strip commas to do math)
-    // Default to 0 if text is invalid
-    let startValue = parseInt(obj.innerHTML.replace(/,/g, '')) || 0;
+    // Get current value or default to 0
+    const startValue = parseInt(obj.innerHTML.replace(/[^0-9]/g, '')) || 0;
     
-    // If numbers are same, do nothing
     if (startValue === endValue) return;
 
-    const duration = 400; // Animation speed in ms (0.4 seconds)
+    const duration = 500; // Animation takes 0.5 seconds
     const startTime = performance.now();
 
     function step(currentTime) {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
-
-        // Calculate current step
+        
+        // Calculate step
         const current = Math.floor(startValue + (endValue - startValue) * progress);
         
         obj.innerHTML = current.toLocaleString('en-IN');
 
         if (progress < 1) {
-            // Keep animating
-            activeAnimations[id] = requestAnimationFrame(step);
+            requestAnimationFrame(step);
         } else {
-            // Finish exactly on the number
-            obj.innerHTML = endValue.toLocaleString('en-IN');
-            delete activeAnimations[id];
+            obj.innerHTML = endValue.toLocaleString('en-IN'); // Ensure it ends exactly on the number
         }
     }
     
-    // Start the frame
-    activeAnimations[id] = requestAnimationFrame(step);
+    requestAnimationFrame(step);
 }
-
-// --- INITIALIZE ---
-// Run once on load to set initial state (e.g. 11 bands / 3 nodes)
-window.onload = function() {
-    calculate();
-};
