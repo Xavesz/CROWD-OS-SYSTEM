@@ -1,68 +1,105 @@
-/* 
-    CROWD OS - CORE LOGIC ENGINE
-    --------------------------------------
-    Calculates hardware requirements based on:
-    1. AMG8833 Sensor physics (7m range, ~150sqm coverage)
-    2. Crowd Density Algorithms (Watershed, Bicubic Interpolation)
-    3. Rental Business Model (SaaS)
+/* SECURE EVENT - Pricing & Infrastructure Logic
+    Optimized for Speed & Crash-Proofing
 */
 
-// Configuration Constants (Pricing in INR)
-const SPECS = {
-    BAND_PRICE: 100,       // Rental per band
-    NODE_PRICE: 5000,      // Rental per Thermal Omni-Node
-    NODE_COVERAGE: 150,    // 1 Node covers 150 sq meters (7m radius)
-    BAND_BUFFER: 1.05      // 5% extra stock for replacement
+// --- CONFIGURATION (Prices in INR) ---
+const CONFIG = {
+    NODE_RENTAL_COST: 5000, // Per Omni-Node
+    BAND_RENTAL_COST: 100,  // Per Wristband
+    NODE_COVERAGE: 150,     // 1 Node covers 150sqm (7m radius)
+    BAND_BUFFER: 1.05       // 5% extra stock for replacement
 };
 
-// Main Calculation Function
-function calculateLogic() {
-    // 1. Safe Input Retrieval (Defaults to 0 if empty)
-    const attendees = parseInt(document.getElementById('attendees').value) || 0;
-    const area = parseInt(document.getElementById('area').value) || 0;
-    const gates = parseInt(document.getElementById('gates').value) || 0;
+// Global object to store active animation frames (prevents lagging)
+let activeAnimations = {};
 
-    // 2. Hardware Algorithm
+// --- MAIN CALCULATE FUNCTION ---
+function calculate() {
+    // 1. Get Inputs safely (Converts text/empty to 0 instantly)
+    // We use Number() instead of parseInt to safely handle empty strings
+    let attendees = Number(document.getElementById('attendees').value) || 0;
+    let area = Number(document.getElementById('area').value) || 0;
+    let gates = Number(document.getElementById('gates').value) || 0;
+
+    // Prevent negative numbers
+    attendees = Math.max(0, attendees);
+    area = Math.max(0, area);
+    gates = Math.max(0, gates);
+
+    // 2. LOGIC: Guardian Bands
+    // Formula: Attendees + 5% buffer (always round up)
+    let totalBands = Math.ceil(attendees * CONFIG.BAND_BUFFER);
+
+    // 3. LOGIC: Thermal Omni-Nodes
+    // Part A: Gate Nodes (2 per gate for Velocity Tracking In/Out)
+    let gateNodes = gates * 2;
     
-    // BANDS: Total + 5% Buffer for loss/malfunction
-    const totalBands = Math.ceil(attendees * SPECS.BAND_BUFFER);
-
-    // NODES: 
-    // A. Open Zones: Needs overlapping coverage for 'Bicubic Interpolation' smoothing
-    const areaNodes = Math.ceil(area / SPECS.NODE_COVERAGE);
+    // Part B: Zone Nodes (1 per 150sqm for Density Counting)
+    // If area is 0, we need 0 zone nodes (Math.ceil of 0 is 0)
+    let zoneNodes = Math.ceil(area / CONFIG.NODE_COVERAGE);
     
-    // B. Choke Points (Gates): 2 Nodes per gate (In/Out) for 'Adaptive Sliding Window' velocity tracking
-    const gateNodes = gates * 2;
+    let totalNodes = gateNodes + zoneNodes;
+
+    // 4. LOGIC: Financials
+    let costBands = totalBands * CONFIG.BAND_RENTAL_COST;
+    let costNodes = totalNodes * CONFIG.NODE_RENTAL_COST;
+    let totalBudget = costBands + costNodes;
+
+    // 5. UPDATE UI
+    // Run smooth animations for the counters
+    animateValue("band-count", totalBands);
+    animateValue("node-count", totalNodes);
     
-    const totalNodes = areaNodes + gateNodes;
-
-    // 3. Financial Algorithm
-    const totalCost = (totalBands * SPECS.BAND_PRICE) + (totalNodes * SPECS.NODE_PRICE);
-
-    // 4. Update UI Elements
-    document.getElementById('res-bands').innerText = totalBands.toLocaleString();
-    document.getElementById('res-nodes').innerText = totalNodes.toLocaleString();
-    document.getElementById('res-cost').innerText = "₹ " + totalCost.toLocaleString('en-IN');
-
-    // 5. Generate Technical Readout (The "Smart" part of the pitch)
-    updateTechReadout(attendees, areaNodes, gateNodes);
+    // Direct update for cost (Strings are harder to animate smoothly with symbols)
+    const budgetElement = document.getElementById("total-cost");
+    budgetElement.innerHTML = "₹ " + totalBudget.toLocaleString('en-IN');
 }
 
-function updateTechReadout(attendees, areaNodes, gateNodes) {
-    const techBox = document.getElementById('tech-readout');
-    
-    if(attendees === 0) {
-        techBox.innerHTML = "System Standby. Awaiting Event Parameters...";
-        return;
+// --- SMOOTH ANIMATION ENGINE ---
+function animateValue(id, endValue) {
+    const obj = document.getElementById(id);
+    if (!obj) return;
+
+    // STOP previous animation if user is typing fast (Fixes the "Jitter/Lag")
+    if (activeAnimations[id]) {
+        cancelAnimationFrame(activeAnimations[id]);
     }
 
-    techBox.innerHTML = `
-        > Initializing Crowd Physics Engine...<br>
-        > <strong>${gateNodes} Gate Nodes</strong> configured with <span class="tech-highlight">Adaptive Sliding Window</span> to detect panic velocity.<br>
-        > <strong>${areaNodes} Zone Nodes</strong> utilizing <span class="tech-highlight">Bicubic Interpolation</span> and <span class="tech-highlight">Watershed Segmentation</span> for density counting.<br>
-        > <strong>Mesh Network</strong> active for child tracking on ${attendees.toLocaleString()} bands using <span class="tech-highlight">SQA-Phys</span> noise filtering.
-    `;
+    // Get current number (Strip commas to do math)
+    // Default to 0 if text is invalid
+    let startValue = parseInt(obj.innerHTML.replace(/,/g, '')) || 0;
+    
+    // If numbers are same, do nothing
+    if (startValue === endValue) return;
+
+    const duration = 400; // Animation speed in ms (0.4 seconds)
+    const startTime = performance.now();
+
+    function step(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Calculate current step
+        const current = Math.floor(startValue + (endValue - startValue) * progress);
+        
+        obj.innerHTML = current.toLocaleString('en-IN');
+
+        if (progress < 1) {
+            // Keep animating
+            activeAnimations[id] = requestAnimationFrame(step);
+        } else {
+            // Finish exactly on the number
+            obj.innerHTML = endValue.toLocaleString('en-IN');
+            delete activeAnimations[id];
+        }
+    }
+    
+    // Start the frame
+    activeAnimations[id] = requestAnimationFrame(step);
 }
 
-// Initialize on load
-window.onload = calculateLogic;
+// --- INITIALIZE ---
+// Run once on load to set initial state (e.g. 11 bands / 3 nodes)
+window.onload = function() {
+    calculate();
+};
