@@ -1,1 +1,219 @@
+:root {
+    --bg-dark: #0a0a12;
+    --card-bg: rgba(20, 20, 35, 0.85);
+    --thermal-blue: #00f7ff;
+    --thermal-green: #00ff6a;
+    --thermal-red: #ff2a2a;
+    --text-main: #ffffff;
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+}
 
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    overflow-x: hidden;
+}
+
+/* --- THERMAL BACKGROUND EFFECT --- */
+.thermal-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at 20% 30%, #1a0b2e 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, #0b1a2e 0%, transparent 50%);
+    z-index: -1;
+    animation: pulseHeat 10s infinite alternate;
+}
+
+@keyframes pulseHeat {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.1); opacity: 1; }
+}
+
+/* --- LAYOUT --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid rgba(0, 247, 255, 0.3);
+    padding-bottom: 20px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    background: linear-gradient(90deg, var(--thermal-blue), var(--thermal-green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    main { grid-template-columns: 1fr; }
+}
+
+/* --- CARDS --- */
+.card {
+    background: var(--card-bg);
+    border: var(--glass-border);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(8px);
+}
+
+h2 { border-bottom: 1px solid #333; padding-bottom: 10px; font-size: 1.2rem; color: #aaa; }
+
+/* --- INPUTS --- */
+.input-group { margin-bottom: 20px; }
+label { display: block; font-weight: bold; margin-bottom: 5px; color: var(--thermal-blue); }
+input {
+    width: 100%;
+    padding: 10px;
+    background: #000;
+    border: 1px solid #444;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 1.1rem;
+}
+input:focus { outline: none; border-color: var(--thermal-green); }
+small { color: #666; font-size: 0.8rem; }
+
+/* --- RESULTS --- */
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+.cost-item { grid-column: span 2; background: rgba(0, 255, 106, 0.05); border-radius: 10px; }
+
+.result-item {
+    text-align: center;
+    padding: 15px;
+    border: 1px solid #333;
+    border-radius: 10px;
+}
+
+.big-number {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 10px 0;
+    color: var(--text-main);
+}
+
+.badge {
+    background: #222;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: #888;
+}
+
+.technical-summary {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #ccc;
+    background: rgba(0,0,0,0.3);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+/* --- WRIST WATCH VISUAL (CSS ART) --- */
+.visual-card {
+    grid-column: span 2; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+}
+
+.device-showcase {
+    margin-top: 20px;
+    position: relative;
+}
+
+.watch-container {
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.watch-body {
+    width: 100px;
+    height: 100px;
+    background: #222;
+    border-radius: 20px;
+    border: 2px solid #444;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    box-shadow: 0 0 20px rgba(0, 247, 255, 0.2);
+}
+
+.screen {
+    width: 80px;
+    height: 80px;
+    background: #000;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.fa-arrow-right {
+    font-size: 40px;
+    color: var(--thermal-green);
+}
+
+.zone-text {
+    font-size: 10px;
+    color: #fff;
+    margin-top: 5px;
+    font-family: monospace;
+}
+
+.watch-strap {
+    width: 60px;
+    height: 60px;
+    background: #333;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: -10px;
+}
+
+.watch-strap.bottom {
+    border-radius: 0 0 10px 10px;
+    margin-top: -10px;
+    margin-bottom: 0;
+}
+
+.sensor-glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0,255,106,0.2) 0%, transparent 70%);
+    animation: pulseSensor 2s infinite;
+    z-index: 1;
+}
+
+@keyframes pulseSensor {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.3; }
+}
+
+.blink { animation: blinker 1s linear infinite; }
+@keyframes blinker { 50% { opacity: 0; } }
