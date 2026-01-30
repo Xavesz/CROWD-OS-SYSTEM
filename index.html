@@ -1,306 +1,147 @@
-
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>SecureEvent | Intelligent Safety Planner</title>
-
-<!-- Google Fonts for Professional Typography -->
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-
-<!-- Font Awesome for Icons -->
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<link rel="stylesheet" href="style.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureEvent | Intelligent Safety Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-
-
-<!-- Animated Background -->
-
-<div class="bg-animation"></div>
-
-<div class="grid-overlay"></div>
-
-
-
-<div class="app-container">
-
-<!-- HEADER -->
-
-<header>
-
-<div class="logo-area">
-
-<i class="fa-solid fa-shield-virus logo-icon"></i>
-
-<div class="logo-text">
-
-<h1>SecureEvent</h1>
-
-<span class="tagline">Predictive Crowd Safety OS</span>
-
-</div>
-
-</div>
-
-<div class="status-indicator">
-
-<span class="dot"></span> System Operational
-
-</div>
-
-</header>
-
-
-
-<main>
-
-<!-- TOP SECTION: CALCULATOR -->
-
-<div class="dashboard-grid">
-
-
-<!-- LEFT: INPUTS -->
-
-<section class="panel input-panel">
-
-<div class="panel-header">
-
-<h2><i class="fa-solid fa-sliders"></i> Event Parameters</h2>
-
-<p>Enter your event details to generate a safety infrastructure plan.</p>
-
-</div>
-
-
-<form id="calculator">
-
-<div class="input-group">
-
-<label>Expected Attendees</label>
-
-<div class="input-wrapper">
-
-<i class="fa-solid fa-users"></i>
-
-<input type="number" id="attendees" value="10" min="0" oninput="calculate()">
-
-</div>
-
-<small>Total projected ticket sales</small>
-
-</div>
-
-
-
-<div class="input-group">
-
-<label>Venue Size (sqm)</label>
-
-<div class="input-wrapper">
-
-<i class="fa-solid fa-ruler-combined"></i>
-
-<input type="number" id="area" value="1" min="0" oninput="calculate()">
-
-</div>
-
-<small>Open standing area only</small>
-
-</div>
-
-
-
-<div class="input-group">
-
-<label>Entry/Exit Gates</label>
-
-<div class="input-wrapper">
-
-<i class="fa-solid fa-door-open"></i>
-
-<input type="number" id="gates" value="1" min="0" oninput="calculate()">
-
-</div>
-
-<small>Choke points for velocity tracking</small>
-
-</div>
-
-</form>
-
-</section>
-
-
-
-<!-- RIGHT: OUTPUTS -->
-
-<section class="panel output-panel">
-
-<div class="panel-header">
-
-<h2><i class="fa-solid fa-chart-pie"></i> Deployment Plan</h2>
-
-<p>AI-Calculated Infrastructure Requirements</p>
-
-</div>
-
-
-
-<div class="stats-container">
-
-<!-- Result 1 -->
-
-<div class="stat-card glow-blue">
-
-<div class="icon-box"><i class="fa-solid fa-ring"></i></div>
-
-<div class="stat-info">
-
-<h3 id="band-count">0</h3>
-
-<label>Guardian Bands</label>
-
-<span class="sub-text">Includes 5% Buffer Stock</span>
-
-</div>
-
-</div>
-
-
-
-<!-- Result 2 -->
-
-<div class="stat-card glow-orange">
-
-<div class="icon-box"><i class="fa-solid fa-camera-flashes"></i></div>
-
-<div class="stat-info">
-
-<h3 id="node-count">0</h3>
-
-<label>Thermal Omni-Nodes</label>
-
-<span class="sub-text">Covers Gates + Density Zones</span>
-
-</div>
-
-</div>
-
-
-
-<!-- Result 3: COST -->
-
-<div class="stat-card glow-green full-width">
-
-<div class="icon-box"><i class="fa-solid fa-indian-rupee-sign"></i></div>
-
-<div class="stat-info">
-
-<h3 id="total-cost">₹ 0</h3>
-
-<label>Estimated Rental Budget</label>
-
-<span class="sub-text">Total OPEX (Hardware-as-a-Service)</span>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-</div>
-
-
-
-<!-- BOTTOM SECTION: TECHNOLOGY EXPLAINER -->
-
-<section class="tech-explainer">
-
-<div class="tech-card">
-
-<div class="tech-header">
-
-<i class="fa-solid fa-eye-low-vision"></i>
-
-<h3>Thermal Omni-Nodes</h3>
-
-</div>
-
-<p>
-
-<strong>What it does:</strong> Replaces invasive CCTV with privacy-safe thermal sensors.
-
-<br><br>
-
-<strong>The Tech:</strong> Uses the <em>AMG8833 Sensor</em> to detect heat grids. Our software applies <strong>Bicubic Interpolation</strong> to smooth images and the <strong>Watershed Algorithm</strong> to count people even in pitch-black darkness or smoke. It detects "Panic Velocity" at gates to predict stampedes.
-
-</p>
-
-</div>
-
-
-
-<div class="tech-card">
-
-<div class="tech-header">
-
-<i class="fa-solid fa-wifi"></i>
-
-<h3>Guardian Bands</h3>
-
-</div>
-
-<p>
-
-<strong>What it does:</strong> Acts as a digital lifeline when cell towers jam.
-
-<br><br>
-
-<strong>The Tech:</strong> Creates an autonomous <strong>Mesh Network</strong> to locate lost children and send SOS signals. It uses the <strong>SQA-Phys AI</strong> (running on the band) to filter out dancing motions, ensuring only real medical emergencies trigger an alert.
-
-</p>
-
-</div>
-
-</section>
-
-
-
-</main>
-
-
-
-<footer>
-
-<p>&copy; 2024 SecureEvent Technologies. Proprietary Algorithms. <span class="highlight">Safety without Surveillance.</span></p>
-
-</footer>
-
-</div>
-
-
-
-<script src="script.js"></script>
-
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="app-container">
+        <header>
+            <div class="logo-area">
+                <i class="fa-solid fa-shield-virus logo-icon"></i>
+                <div class="logo-text">
+                    <h1>SecureEvent</h1>
+                    <span class="tagline">Predictive Crowd Safety OS</span>
+                </div>
+            </div>
+            <div class="status-indicator">
+                <span class="dot"></span> System Operational
+            </div>
+        </header>
+
+        <main>
+            <div class="dashboard-grid">
+                
+                <section class="panel input-panel">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-sliders"></i> Event Parameters</h2>
+                        <p>Enter your event details to generate a safety infrastructure plan.</p>
+                    </div>
+                    
+                    <form id="calculator">
+                        <div class="input-group">
+                            <label>Expected Attendees</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-users"></i>
+                                <input type="number" id="attendees" placeholder="e.g. 5000" min="0">
+                            </div>
+                            <small>Total projected ticket sales</small>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Venue Size (sqm)</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-ruler-combined"></i>
+                                <input type="number" id="area" placeholder="e.g. 2000" min="0">
+                            </div>
+                            <small>Open standing area only</small>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Entry/Exit Gates</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-door-open"></i>
+                                <input type="number" id="gates" placeholder="e.g. 4" min="0">
+                            </div>
+                            <small>Choke points for velocity tracking</small>
+                        </div>
+
+                        <button type="button" class="calc-btn" onclick="calculate()">
+                            <i class="fa-solid fa-microchip"></i> Generate Plan
+                        </button>
+                    </form>
+                </section>
+
+                <section class="panel output-panel">
+                    <div class="panel-header">
+                        <h2><i class="fa-solid fa-chart-pie"></i> Deployment Plan</h2>
+                        <p>AI-Calculated Infrastructure Requirements</p>
+                    </div>
+
+                    <div class="stats-container">
+                        <div class="stat-card glow-blue">
+                            <div class="icon-box"><i class="fa-solid fa-ring"></i></div>
+                            <div class="stat-info">
+                                <h3 id="band-count">0</h3>
+                                <label>Guardian Bands</label>
+                                <span class="sub-text">Includes 5% Buffer Stock</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glow-orange">
+                            <div class="icon-box"><i class="fa-solid fa-camera-flashes"></i></div>
+                            <div class="stat-info">
+                                <h3 id="node-count">0</h3>
+                                <label>Thermal Omni-Nodes</label>
+                                <span class="sub-text">Covers Gates + Density Zones</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glow-green full-width">
+                            <div class="icon-box"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                            <div class="stat-info">
+                                <h3 id="total-cost">₹ 0</h3>
+                                <label>Estimated Rental Budget</label>
+                                <span class="sub-text">Total OPEX (Hardware-as-a-Service)</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <section class="tech-explainer">
+                <div class="tech-card">
+                    <div class="tech-header">
+                        <i class="fa-solid fa-eye-low-vision"></i>
+                        <h3>Thermal Omni-Nodes</h3>
+                    </div>
+                    <p>
+                        <strong>What it does:</strong> Replaces invasive CCTV with privacy-safe thermal sensors.
+                        <br><br>
+                        <strong>The Tech:</strong> Uses the <em>AMG8833 Sensor</em> to detect heat grids. Our software applies <strong>Bicubic Interpolation</strong> to smooth images and the <strong>Watershed Algorithm</strong> to count people even in pitch-black darkness or smoke. It detects "Panic Velocity" at gates to predict stampedes.
+                    </p>
+                </div>
+
+                <div class="tech-card">
+                    <div class="tech-header">
+                        <i class="fa-solid fa-wifi"></i>
+                        <h3>Guardian Bands</h3>
+                    </div>
+                    <p>
+                        <strong>What it does:</strong> Acts as a digital lifeline when cell towers jam.
+                        <br><br>
+                        <strong>The Tech:</strong> Creates an autonomous <strong>Mesh Network</strong> to locate lost children and send SOS signals. It uses the <strong>SQA-Phys AI</strong> (running on the band) to filter out dancing motions, ensuring only real medical emergencies trigger an alert.
+                    </p>
+                </div>
+            </section>
+
+        </main>
+
+        <footer>
+            <p>&copy; 2024 SecureEvent Technologies. Proprietary Algorithms. <span class="highlight">Safety without Surveillance.</span></p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
 </body>
-
 </html>
