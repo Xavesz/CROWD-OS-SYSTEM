@@ -1,33 +1,118 @@
-/* --- ADD THIS TO THE BOTTOM OF style.css --- */
+:root {
+    --bg-dark: #090e15;
+    --panel-bg: rgba(20, 25, 35, 0.8);
+    --primary: #00f2ff; /* Cyan */
+    --secondary: #ff8c00; /* Orange */
+    --success: #0aff6c; /* Green */
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+    --border-color: rgba(255, 255, 255, 0.1);
+}
 
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Background Animation */
+.bg-animation {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at 10% 20%, rgba(0, 242, 255, 0.08), transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 140, 0, 0.08), transparent 40%);
+    z-index: -2;
+}
+.grid-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: -1;
+}
+
+/* Layout */
+.app-container { width: 100%; max-width: 1000px; display: flex; flex-direction: column; gap: 30px; }
+
+header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
+.logo-area { display: flex; align-items: center; gap: 15px; }
+.logo-icon { font-size: 2.5rem; color: var(--primary); filter: drop-shadow(0 0 10px rgba(0,242,255,0.3)); }
+h1 { font-family: 'Rajdhani', sans-serif; font-size: 2rem; text-transform: uppercase; letter-spacing: 2px; }
+.tagline { color: var(--text-muted); font-size: 0.9rem; }
+
+.dashboard-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 25px; }
+@media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+/* Panels */
+.panel { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 30px; backdrop-filter: blur(10px); }
+.panel-header { margin-bottom: 20px; }
+.panel-header h2 { font-family: 'Rajdhani', sans-serif; font-size: 1.4rem; color: #fff; margin-bottom: 5px; }
+.panel-header p { font-size: 0.9rem; color: var(--text-muted); }
+
+/* Inputs */
+.input-group { margin-bottom: 20px; }
+.input-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+.input-wrapper { position: relative; display: flex; align-items: center; }
+.input-wrapper i { position: absolute; left: 15px; color: var(--text-muted); }
+input {
+    width: 100%; padding: 12px 15px 12px 45px;
+    background: rgba(0,0,0,0.3); border: 1px solid var(--border-color);
+    border-radius: 8px; color: #fff; font-size: 1.1rem; transition: 0.3s;
+}
+input:focus { outline: none; border-color: var(--primary); background: rgba(0, 242, 255, 0.05); }
+
+/* --- MEGA BUTTON STYLE --- */
 .calc-btn {
     width: 100%;
-    margin-top: 15px;
-    padding: 16px;
-    background: var(--primary); /* Neon Cyan */
-    color: var(--bg-dark); /* Dark text for contrast */
+    margin-top: 25px;
+    padding: 18px;
+    background: linear-gradient(135deg, var(--primary), #00c2cc);
+    color: #000;
     border: none;
     border-radius: 8px;
     font-family: 'Rajdhani', sans-serif;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
 }
-
 .calc-btn:hover {
-    background: #fff;
-    box-shadow: 0 0 30px rgba(0, 242, 255, 0.6);
     transform: translateY(-2px);
+    box-shadow: 0 0 35px rgba(0, 242, 255, 0.6);
+    background: #fff;
 }
+.calc-btn:active { transform: scale(0.98); }
 
-.calc-btn:active {
-    transform: translateY(1px);
+/* Stats Cards */
+.stats-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.stat-card {
+    background: rgba(255,255,255,0.03); border-radius: 12px; padding: 20px;
+    display: flex; gap: 15px; align-items: flex-start;
+    border: 1px solid transparent; transition: transform 0.3s;
 }
+.stat-card:hover { transform: translateY(-3px); }
+.full-width { grid-column: span 2; }
+
+/* Glow Colors */
+.glow-blue { border-color: rgba(0, 242, 255, 0.3); box-shadow: 0 4px 15px rgba(0, 242, 255, 0.1); }
+.glow-blue i { color: var(--primary); }
+.glow-orange { border-color: rgba(255, 140, 0, 0.3); box-shadow: 0 4px 15px rgba(255, 140, 0, 0.1); }
+.glow-orange i { color: var(--secondary); }
+.glow-green { border-color: rgba(10, 255, 108, 0.3); box-shadow: 0 4px 15px rgba(10, 255, 108, 0.1); }
+.glow-green i { color: var(--success); }
+
+.stat-info h3 { font-size: 2.2rem; font-family: 'Rajdhani', sans-serif; font-weight: 700; line-height: 1; margin-bottom: 5px; }
+.stat-info label { font-weight: 600; font-size: 0.9rem; }
+.sub-text { font-size: 0.75rem; color: var(--text-muted); display: block; margin-top: 5px; }
+.icon-box { font-size: 1.5rem; background: rgba(255,255,255,0.05); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 10px; }
+
+footer { text-align: center; color: var(--text-muted); font-size: 0.8rem; margin-top: 30px; border-top: 1px solid var(--border-color); padding-top: 20px; }
